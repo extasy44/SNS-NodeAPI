@@ -22,6 +22,14 @@ const { userById } = require('../controllers/user');
 const router = express.Router();
 
 router.get('/posts', getPosts);
+
+router.put('/post/like', requireSignin, like);
+router.put('/post/unlike', requireSignin, unlike);
+
+router.put('/post/comment', requireSignin, comment);
+router.put('/post/uncomment', requireSignin, uncomment);
+router.put('/post/updatecomment', requireSignin, updateComment);
+
 router.post('/post/new/:userId', requireSignin, createPost, createPostValidator);
 router.get('/posts/by/:userId', requireSignin, postsByUsers);
 router.get('/post/:postId', singlePost);

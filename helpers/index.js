@@ -1,23 +1,20 @@
-exports.createPostValidatior = (req, res, next) => {
-  req.check("title", "Write a title").notEmpty();
-  req.check("title", "Title must be between 4 to 150 characters").isLength({
-    min: 4,
-    max: 150,
+const nodeMailer = require('nodemailer');
+
+const defaultEmailData = { from: 'noreply@node-react.com' };
+
+exports.sendEmail = (emailData) => {
+  const transporter = nodeMailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    requireTLS: true,
+    auth: {
+      user: 'some_email@gmail.com',
+      pass: 'kshzlmomlthllktq'
+    }
   });
-  req.check("body", "Write a body").notEmpty();
-  req.check("body", "body must be between 4 to 1500 characters").isLength({
-    min: 4,
-    max: 1500,
-  });
-
-  //check for errors
-  const errors = req.validationErrors();
-
-  //if error show the first one as they happen
-  if (erros) {
-    const firstError = errors.map((error) => error.msg)[0];
-    return res.status(400).json({ error: firstError });
-  }
-
-  next();
+  return transporter
+    .sendMail(emailData)
+    .then((info) => console.log(`Message sent: ${info.response}`))
+    .catch((err) => console.log(`Problem sending email: ${err}`));
 };
